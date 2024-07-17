@@ -1,34 +1,34 @@
+// src/components/TodoWrapper.jsx
 import React, { useEffect, useState } from 'react';
-import { v4 as uuidv4 } from 'uuid';
 import { Todo } from './todo';
-import { getAllToDo, addTodo ,editTodo,deleteTodo} from '../utilities/Handle';
+import { getAllToDo, addTodo, editTodo, deleteTodo } from '../utilities/Handle';
 
-export const TodoWrapper = () => {
+const TodoWrapper = ({ email, userId }) => {
     const [todos, setTodos] = useState([]);
     const [value, setValue] = useState('');
-    const [isUpdate,setIsUpdate]=useState(false);
-    const [todoid,setTodoid]=useState("");
-    useEffect(() => {
-        getAllToDo(setTodos);
-    }, []);
+    const [isUpdate, setIsUpdate] = useState(false);
+    const [todoId, setTodoId] = useState("");
 
-   
+    useEffect(() => {
+        getAllToDo(userId, setTodos); // Fetch todos specific to the user
+    }, [userId]);
+
     const handleEdit = (id, text) => {
         setValue(text);
-        setTodoid(id);
+        setTodoId(id);
         setIsUpdate(true);
     };
+
     const handleDelete = async (id) => {
-        await deleteTodo(id, setTodos);
+        await deleteTodo(userId, id, email, setTodos);
     };
 
     const handleSubmit = async (e) => {
         e.preventDefault();
-        e.preventDefault();
         if (isUpdate) {
-            await editTodo(todoid, value, setTodos, setValue, setIsUpdate);
+            await editTodo(userId, todoId, email, value, setTodos, setValue, setIsUpdate);
         } else {
-            await addTodo(value, setValue, setTodos);
+            await addTodo(userId, value, email, setValue, setTodos);
         }
     };
 
@@ -42,19 +42,20 @@ export const TodoWrapper = () => {
                     onChange={(e) => setValue(e.target.value)}
                     className="todo-input"
                     placeholder='What is the task today?'
+                    style={{color:'black'}}
                 />
-                <button type="submit" className='todo-btn'>{isUpdate?"Update":"Add Task"}</button>
+                <button type="submit" className='todo-btn'>{isUpdate ? "Update" : "Add Task"}</button>
             </form>
             {todos.map((item) => (
                 <Todo
                     key={item._id}
                     task={item.text}
-                    // toggleComplete={toggleComplete}
-                    
                     editTodo={() => handleEdit(item._id, item.text)}
-                    deleteTodo={()=>handleDelete(item._id)}
+                    deleteTodo={() => handleDelete(item._id)}
                 />
             ))}
         </div>
     );
 };
+
+export default TodoWrapper; // Correctly export TodoWrapper
