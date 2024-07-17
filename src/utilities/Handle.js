@@ -1,50 +1,53 @@
 import axios from 'axios'
 
-const baseUrl = 'https://todoapp-backend-zes9.onrender.com/'
+const baseUrl = 'http://localhost:5000/route/'
 
-export const getAllToDo = async (setToDo) => {
+export const getAllToDo = async (userId, setToDo) => {
     try {
-        const response = await axios.get(baseUrl);
-        console.log('data --->', response.data);
-        setToDo(response.data);
+        
+        const response = await axios.post(`${baseUrl}`, { _id: userId });
+        console.log('Response data:', response.data);
+        setToDo(response.data.list);
+    } catch (err) {
+        console.error('Error fetching todos:', err);
     }
-    catch (err) {
-        console.log(err);
-    }
-}
-export const addTodo=async (text,setText,setTodos)=>{
+};
+export const addTodo=async (userId,text,email,setText,setTodos)=>{
     try{
-        const response = await axios.post(`${baseUrl}save`, { text });
+        console.log('UserID:', email);
+        console.log('Base URL:', `${baseUrl}save`);
+        const response = await axios.post(`${baseUrl}save`, { email:email , text:text});
         console.log(response.data);
         setText("");
-        getAllToDo(setTodos);
+        getAllToDo(userId,setTodos);
     }
     catch(err){
         console.log(err);
     }
 }
-export const editTodo=async(_id,text,setTodos,setText,setIsUpdate)=>{
+export const editTodo=async(userId,_id,email,text,setTodos,setText,setIsUpdate)=>{
     try{
-        const response=await axios.put(`${baseUrl}update`,{_id,text});
+        const response=await axios.put(`${baseUrl}update`,{_id,email,text});
         console.log(response.data);
         setText("");
         setIsUpdate(false);
-        getAllToDo(setTodos);
+        getAllToDo(userId,setTodos);
     }
     catch(err){
         console.log(err);
     }
 }
-export const deleteTodo=async(_id,setTodos)=>{
-    try{
-        const response=await axios.delete(`${baseUrl}delete`,{
-            data: { _id }
-          });
-        
+export const deleteTodo = async (userId, _id, email, setTodos) => {
+    try {
+        const response = await axios.delete(`${baseUrl}delete`, {
+            params: {
+                _id,
+                email
+            }
+        });
         console.log(response.data);
-        getAllToDo(setTodos);
-    }
-    catch(err){
+        getAllToDo(userId, setTodos);
+    } catch (err) {
         console.log(err);
     }
 }
