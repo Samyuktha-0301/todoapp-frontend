@@ -3,7 +3,7 @@ import axios from 'axios';
 import './login.css';
 import TodoWrapper from '../components/TodoWrapper';
 
-const baseUrl = 'http://localhost:5000/';
+const baseUrl = 'https://backend-todo-app-t3l1.onrender.com/';
 
 const Signup = () => {
   const [email, setEmail] = useState('');
