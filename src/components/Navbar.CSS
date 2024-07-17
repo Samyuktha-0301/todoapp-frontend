@@ -1,0 +1,21 @@
+.container {
+    display: flex;
+}
+.navbar-brand {
+color: #1A1A40;;
+
+font-size: 25px;
+}
+.btn-nav{
+
+background-color:#1A1A40;
+
+border-radius: 10px;
+
+color: white;
+
+font-weight: bold
+}
+.nav-link active{
+    font-size: 25px;
+}
