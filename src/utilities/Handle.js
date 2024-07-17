@@ -1,6 +1,6 @@
 import axios from 'axios'
 
-const baseUrl = 'http://localhost:5000/route/'
+const baseUrl = 'https://backend-todo-app-t3l1.onrender.com/route/'
 
 export const getAllToDo = async (userId, setToDo) => {
     try {
